@@ -1,0 +1,6 @@
+*.txt
+*.old
+limine/
+bin/
+__pycache__/
+.vscode/
