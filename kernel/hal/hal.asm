@@ -6,11 +6,13 @@ extern halInitTSS
 extern abort
 section .text
 halEarlyInit:
+    push rdi
     mov rdi, str0
     call dbgPuts
     call halInitIDT
     call halInitGDT
     call halInitTSS
+    pop rdi
     ret
 
 section .rodata
