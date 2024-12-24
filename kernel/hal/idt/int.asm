@@ -25,6 +25,7 @@ userHandler:
     call abort
 
 unhandledInt:
+    mov rdx, [rdi+0xB0]
     mov rsi, [rdi+0xA8]
     mov rdi, str0
     call dbgPrintf
@@ -66,6 +67,6 @@ intJumpTable:
     dq unhandledInt
 
 section .rodata
-str0: db "TODO: handle exception 0x%lx", 0x0a, 0
+str0: db "TODO: handle exception 0x%lx with error 0x%lx", 0x0a, 0
 str1: db "TODO: Handle user interrupt 0x%lx", 0x0a, 0
 str2: db "Got interrupt #0x%lx", 0x0a, 0

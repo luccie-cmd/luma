@@ -8,6 +8,9 @@
     - [ ] IDT
         - [x] Setting IDTR register
         - [ ] Exceptions handler
+            - [ ] Page fault
+            - [ ] Invalid Opcode
+            - [ ] General Protection
         - [ ] Hardware interrupt handler
     - [x] GDT
         - [x] Setting GDTR register
