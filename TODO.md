@@ -6,11 +6,11 @@
     - [ ] Loading of tables by signature
 - [ ] HAL
     - [ ] IDT
-        - [ ] Setting IDTR register
+        - [x] Setting IDTR register
         - [ ] Exceptions handler
         - [ ] Hardware interrupt handler
-    - [ ] GDT
-        - [ ] Setting GDTR register
+    - [x] GDT
+        - [x] Setting GDTR register
     - [ ] TSS
         - [ ] Setting task register
     - [ ] VFS
