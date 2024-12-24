@@ -1,10 +1,16 @@
 global halEarlyInit
 extern dbgPuts
+extern halInitGDT
+extern halInitIDT
+extern halInitTSS
 extern abort
 section .text
 halEarlyInit:
     mov rdi, str0
     call dbgPuts
+    call halInitIDT
+    call halInitGDT
+    call halInitTSS
     ret
 
 section .rodata
