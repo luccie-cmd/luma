@@ -24,8 +24,6 @@ SECTIONS
     {
         __text_start = .;
         *(.text .text.*)
-        *(.init_array .init_array.*) /* Place .init_array here */
-        *(.fini_array .fini_array.*) /* Place .fini_array here */
         __text_end = .;
     } :text
 
@@ -42,7 +40,6 @@ SECTIONS
     {
         __data_start = .;
         *(.data .data.*)
-        KEEP(*(.gnu.linkonce.t.*)) /* Ensure vtable sections are kept */
         __data_end = .;
     } :data
 
