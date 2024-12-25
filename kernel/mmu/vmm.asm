@@ -12,6 +12,7 @@ vmmInit:
     je .failHHDM
     mov rdi, [rdi+8]
     mov QWORD [hhdm_offset], rdi
+    mov [initialized], BYTE 1
     mov rdi, str2
     call dbgPuts
     pop rdi
@@ -22,6 +23,11 @@ vmmInit:
     call abort
 
 vmmMakeVirtual:
+    movzx rax, BYTE [initialized]
+    cmp rax, 1
+    je .afterCheck
+    call vmmInit
+.afterCheck:
     mov rax, rdi
     add rax, [hhdm_offset]
     ret
@@ -33,6 +39,7 @@ str2: db "Initialized virtual memory", 0x0a, 0
 
 section .bss
 hhdm_offset: resq 1
+initialized: resb 1
 
 section .limine_requests
 align 16
