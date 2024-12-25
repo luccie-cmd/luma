@@ -39,7 +39,7 @@
         - [ ] Allocate page
         - [ ] Free pages
     - [ ] VMM
-        - [ ] Make virtual addresses
+        - [x] Make virtual addresses
         - [ ] Map page to address in specific PML 
     - [ ] Heap
         - [ ] Allocate N bytes, after eachother
