@@ -66,10 +66,14 @@ acpiGetTableBySignature:
     call memcmp
     pop rdx
     pop rsi
-    pop rdi
     cmp rax, 0
-    jne .loopAfterMemcmp
     mov rax, rdi
+    pop rdi
+    jne .loopAfterMemcmp
+    mov rsi, rdx
+    mov rdx, rax
+    mov rdi, str7
+    call dbgPrintf
     pop rcx
     pop rdx
     pop rsi
@@ -106,6 +110,7 @@ str3: db "Loading FADT", 0x0a, 0
 str4: db "Loaded FADT", 0x0a, 0
 str5: db "FACP"
 str6: db "Not able to find table `%.4s`", 0x0a, 0
+str7: db "Loaded %.4s at 0x%lx", 0x0a, 0
 
 section .bss
 XSDP: resq 1
