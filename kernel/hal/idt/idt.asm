@@ -9,8 +9,6 @@ section .text
 halInitIDT:
     push rdi
     push rsi
-    mov rdi, str0
-    call dbgPuts
     mov rdi, IDT
     lidt [rdi]
     call HalInitISRGates
@@ -89,7 +87,6 @@ section .bss
 entries: resb 4096
 
 section .rodata
-str0: db "Setting IDT", 0x0a, 0
 IDT:
     .limit: dw 4095
     .base:  dq entries

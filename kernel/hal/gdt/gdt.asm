@@ -4,8 +4,6 @@ section .text
 halInitGDT:
     push rax
     push rdi
-    mov rdi, str0
-    call dbgPuts
     lea rax, [GDTR]
     lgdt [rax]
     push 0x08
@@ -22,9 +20,6 @@ halInitGDT:
     pop rdi
     pop rax
     ret
-
-section .rodata
-str0: db "Setting GDT", 0x0a, 0
 
 section .data
 global GDT
