@@ -40,6 +40,7 @@ SECTIONS
     {
         __data_start = .;
         *(.data .data.*)
+        *(.limine_requests .limine_requests.*)
         __data_end = .;
     } :data
 
