@@ -40,7 +40,7 @@
         - [ ] Free pages
     - [ ] VMM
         - [x] Make virtual addresses
-        - [ ] Map page to address in specific PML 
+        - [ ] Map page to address in specific PML
     - [ ] Heap
         - [ ] Allocate N bytes, after eachother
             - [ ] Kernel
