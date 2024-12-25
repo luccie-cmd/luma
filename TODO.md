@@ -1,7 +1,7 @@
 [ ] Luma
 - [ ] ACPI
-    - [ ] Load RSDP
-    - [ ] Load XSDT
+    - [x] Load RSDP
+    - [x] Load XSDT
     - [ ] Init FADT
     - [ ] Loading of tables by signature
 - [ ] HAL
