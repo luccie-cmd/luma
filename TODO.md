@@ -1,8 +1,8 @@
 [ ] Luma
-- [ ] ACPI
+- [x] ACPI
     - [x] Load RSDP
     - [x] Load XSDT
-    - [ ] Init FADT
+    - [x] Init FADT
     - [x] Loading of tables by signature
 - [ ] HAL
     - [ ] IDT

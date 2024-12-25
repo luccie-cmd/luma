@@ -24,7 +24,7 @@ acpiInit:
     mov BYTE [initialized], 1
     mov rsi, [numberOfTables]
     mov rdi, str2
-    call dbgPuts
+    call dbgPrintf
     pop rsi
     pop rdi
     ret
@@ -92,25 +92,54 @@ acpiGetTableBySignature:
 
 initFADT:
     push rdi
+    push rdx
     mov rdi, str3
     call dbgPuts
     mov rdi, str5
     call acpiGetTableBySignature
-    call abort
+    cmp DWORD [rax+48], 0
+    je .doneSmiZero
+    movzx rdi, BYTE [rax+53]
+    cmp BYTE [rax+52], dil
+    jne .doneEnableDisable
+    test BYTE [rax+64], 1
+    jne .donePM1aCrtl
+    mov rax, [rax+53]
+    mov rdx, [rax+48]
+    out dx, al
+    xor rdi, rdi
+    jmp .doneFadtInit
+.doneSmiZero:
+    mov rdi, str8
+    jmp .doneFadtInit
+.doneEnableDisable:
+    mov rdi, str9
+    jmp .doneFadtInit
+.donePM1aCrtl:
+    mov rdi, str10
+.doneFadtInit:
+    cmp rdi, 0
+    je .afterPrintLast
+    call dbgPrintf
+.afterPrintLast:
     mov rdi, str4
     call dbgPuts
+    pop rdx
     pop rdi
     ret
 
 section .rodata
 str0: db "Initializing ACPI subsystem", 0x0a, 0
 str1: db "Failed to get RSDP", 0x0a, 0
-str2: db "Initialized ACPI subsystem", 0x0a, 0x09, "0x%ld entries present", 0x0a, 0
+str2: db "Initialized ACPI subsystem", 0x0a, 0x09, "%ld entries present", 0x0a, 0
 str3: db "Loading FADT", 0x0a, 0
 str4: db "Loaded FADT", 0x0a, 0
 str5: db "FACP"
 str6: db "Not able to find table `%.4s`", 0x0a, 0
 str7: db "Loaded %.4s at 0x%lx", 0x0a, 0
+str8: db "ACPI mode already enabled. SMI command port == 0", 0x0a, 0
+str9: db "ACPI mode already enabled. table->AcpiEnable == table->AcpiDisable == 0", 0x0a, 0
+str10: db "ACPI mode already enabled. (table->PM1aControlBlock & 1) == 1", 0x0a, 0
 
 section .bss
 XSDP: resq 1
