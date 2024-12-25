@@ -13,7 +13,7 @@ acpiInit:
     mov rdi, QWORD [rdi+8]
     call vmmMakeVirtual
     mov [XSDT], rax
-    call initFADT
+    ; call initFADT
     mov rdi, str2
     call dbgPuts
     pop rdi
