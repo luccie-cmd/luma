@@ -26,13 +26,13 @@
     - [ ] IRQ
         - [ ] Load MADT table
         - [ ] Load MADT entries
-            - [ ] Init LAPIC
-            - [ ] Init IOAPIC
-            - [ ] Init IOAPIC ISO
-            - [ ] Init IOAPIC NMIS (NMI source)
-            - [ ] Init LAPIC NMI
-            - [ ] Init LAPIC Address override
-            - [ ] Init lX2APIC
+            - [ ] Handle LAPIC
+            - [ ] Handle IOAPIC
+            - [ ] Handle IOAPIC ISO
+            - [ ] Handle IOAPIC NMIS (NMI source)
+            - [ ] Handle LAPIC NMI
+            - [ ] Handle LAPIC Address override
+            - [ ] Handle lX2APIC
 - [ ] MMU
     - [ ] PMM
         - [ ] Load physical memory map
