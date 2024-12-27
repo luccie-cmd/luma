@@ -77,6 +77,8 @@ acpiGetTableBySignature:
     pop rcx
     pop rdx
     pop rsi
+    mov rdi, rax
+    call vmmMakeVirtual
     pop rdi
     ret
 .loopAfterMemcmp:
