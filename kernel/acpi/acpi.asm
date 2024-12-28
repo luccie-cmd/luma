@@ -1,10 +1,11 @@
 global acpiInit
 global acpiGetTableBySignature
+global acpiPrintTableSignatures
 extern abort
 extern dbgPrintf
 extern dbgPuts
 extern vmmMakeVirtual
-extern memcmp
+extern strncmp
 section .text
 acpiInit:
     push rdi
@@ -34,11 +35,36 @@ acpiInit:
     call abort
 
 getEntries:
+    cmp QWORD [numberOfTables], 0
+    jne .end
     mov rax, [XSDT]
     mov eax, DWORD [rax+4]
     sub rax, 36
     shr rax, 3
     mov [numberOfTables], rax
+    push rdi
+    push rsi
+    mov rsi, [XSDT]
+    lea rsi, [rsi+36]
+    xor rdi, rdi
+    lea rdx, tables
+    jmp .condition
+.loop:
+    push rsi
+    mov rsi, [rsi+(rdi*8)]
+    shl rdi, 3
+    add rdx, rdi
+    mov [rdx], rsi
+    sub rdx, rdi
+    shr rdi, 3
+    pop rsi
+    inc rdi
+.condition:
+    cmp rdi, rax
+    jl .loop
+    pop rsi
+    pop rdi
+.end:
     ret
 
 acpiGetTableBySignature:
@@ -49,48 +75,72 @@ acpiGetTableBySignature:
     push rdi
     push rsi
     push rdx
-    push rcx
-    mov rcx, [XSDT]
-    lea rcx, [rcx+36]
-    mov rdx, rdi
-    mov rsi, [numberOfTables]
-    xor rdi, rdi
-    jmp .condition
+    push r15
+    mov r15, rdi
+    lea rdi, tables
+    xor rsi, rsi
+    mov rdx, [numberOfTables]
 .loop:
     push rdi
     push rsi
     push rdx
-    mov rdi, [rcx+(rdi*8)]
-    mov rsi, rdx
-    mov rdx, 4
-    call memcmp
+    push r14
+    shl rsi, 3
+    add rdi, rsi
+    mov r14, [rdi]
+    mov rdi, [r14]
+    mov rsi, [r15]
+    cmp edi, esi
+    jne .continue
+    mov rax, r14
+    pop r14
     pop rdx
     pop rsi
-    cmp rax, 0
-    mov rax, rdi
     pop rdi
-    jne .loopAfterMemcmp
-    mov rsi, rdx
-    mov rdx, rax
-    mov rdi, str7
-    call dbgPrintf
-    pop rcx
+    pop r15
     pop rdx
     pop rsi
-    mov rdi, rax
-    call vmmMakeVirtual
     pop rdi
     ret
-.loopAfterMemcmp:
-    inc rdi
+.continue:
+    pop r14
+    pop rdx
+    pop rsi
+    pop rdi
+    inc rsi
 .condition:
-    cmp rdi, rsi
+    cmp rsi, rdx
     jl .loop
-.notFound:
-    mov rsi, rdx
     mov rdi, str6
+    mov rsi, r15
     call dbgPrintf
     call abort
+
+acpiPrintTableSignatures:
+    push rdi
+    push rsi
+    push rcx
+    mov rdi, [numberOfTables]
+    mov rsi, [XSDT]
+    lea rsi, [rsi+36]
+    xor rcx, rcx
+    jmp .condition
+.loop:
+    push rdi
+    push rsi
+    mov rsi, [rsi+(rcx*8)]
+    mov rdi, str11
+    call dbgPrintf
+    pop rsi
+    pop rdi
+    inc rcx
+.condition:
+    cmp rcx, rdi
+    jl .loop
+    pop rcx
+    pop rsi
+    pop rdi
+    ret
 
 initFADT:
     push rdi
@@ -142,11 +192,13 @@ str7: db "Loaded %.4s at 0x%lx", 0x0a, 0
 str8: db "ACPI mode already enabled. SMI command port == 0", 0x0a, 0
 str9: db "ACPI mode already enabled. table->AcpiEnable == table->AcpiDisable == 0", 0x0a, 0
 str10: db "ACPI mode already enabled. (table->PM1aControlBlock & 1) == 1", 0x0a, 0
+str11: db "ACPI table `%.4s` present", 0x0a, 0
 
 section .bss
 XSDP: resq 1
 XSDT: resq 1
 FADT: resq 1
+tables: resq 32
 numberOfTables: resq 1
 initialized: resb 1
 
