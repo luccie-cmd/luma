@@ -95,11 +95,16 @@ if "imageSize" not in CONFIG:
 if "debug" in CONFIG.get("config"):
     CONFIG["CFLAGS"] += ["-O0"]
     CONFIG["CFLAGS"] += ["-DDEBUG"]
+    CONFIG["ASFLAGS"] += ["-O0"]
+    CONFIG["ASFLAGS"] += ["-DDEBUG"]
 else:
     CONFIG["CFLAGS"] += ["-O2"]
     CONFIG["CFLAGS"] += ["-DNDEBUG"]
+    CONFIG["ASFLAGS"] += ["-Ox"]
+    CONFIG["ASFLAGS"] += ["-DNDEBUG"]
 if "x64" in CONFIG.get("arch"):
     CONFIG["CFLAGS"] += ["-m64"]
+    CONFIG["ASFLAGS"] += ["-felf64"]
 
 if "debug" in CONFIG.get("config"):
     CONFIG["LDFLAGS"] += ["-O0"]
@@ -413,6 +418,7 @@ def main():
         return
     buildImage(f"{CONFIG['outDir'][0]}/image.img", f"{CONFIG['outDir'][0]}/BOOTX64.EFI", f"{CONFIG['outDir'][0]}/kernel.elf")
     callCmd(f"chown -R {currentUser}:{currentUser} *")
+    callCmd(f"chown -R root:root .git")
     if "run" in sys.argv:
         print("> Running QEMU")
         callCmd(f"./script/run.sh {CONFIG['outDir'][0]} {CONFIG['config'][0]}", True)
