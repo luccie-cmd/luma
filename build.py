@@ -51,7 +51,9 @@ def checkConfig(config: dict[str, list[str]], allowed_config: list[list[str, lis
     return True
 
 CONFIG = readConfig("./script/config.py")
-OLD_CONFIG = readConfig("./script/config.py.old")
+OLD_CONFIG: dict[str, list[str]] = {}
+if os.path.exists("./script/config.py.old"):
+    OLD_CONFIG = readConfig("./script/config.py.old")
 ALLOWED_CONFIG = [
     ["config", ["release", "debug"], True],
     ["arch", ["x64"], True],
@@ -413,12 +415,11 @@ def main():
     linkKernel(f"{CONFIG['outDir'][0]}/kernel", "util/linker.ld", [f"{CONFIG['outDir'][0]}/libc.a", f"{CONFIG['outDir'][0]}/drivers.a", f"{CONFIG['outDir'][0]}/common.a"])
     print("> Getting info")
     getInfo()
-    currentUser = os.getlogin()
     if "compile" in sys.argv:
         return
     buildImage(f"{CONFIG['outDir'][0]}/image.img", f"{CONFIG['outDir'][0]}/BOOTX64.EFI", f"{CONFIG['outDir'][0]}/kernel.elf")
+    currentUser = os.getlogin()
     callCmd(f"chown -R {currentUser}:{currentUser} *")
-    callCmd(f"chown -R root:root .git")
     if "run" in sys.argv:
         print("> Running QEMU")
         callCmd(f"./script/run.sh {CONFIG['outDir'][0]} {CONFIG['config'][0]}", True)

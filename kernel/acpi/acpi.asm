@@ -128,9 +128,15 @@ acpiPrintTableSignatures:
 .loop:
     push rdi
     push rsi
-    mov rsi, [rsi+(rcx*8)]
+    push rdx
+    shl rcx, 3
+    add rsi, rcx
+    mov rdx, [rsi]
+    mov rsi, [rsi]
+    shr rcx, 3
     mov rdi, str11
     call dbgPrintf
+    pop rdx
     pop rsi
     pop rdi
     inc rcx
@@ -192,7 +198,7 @@ str7: db "Loaded %.4s at 0x%lx", 0x0a, 0
 str8: db "ACPI mode already enabled. SMI command port == 0", 0x0a, 0
 str9: db "ACPI mode already enabled. table->AcpiEnable == table->AcpiDisable == 0", 0x0a, 0
 str10: db "ACPI mode already enabled. (table->PM1aControlBlock & 1) == 1", 0x0a, 0
-str11: db "ACPI table `%.4s` present", 0x0a, 0
+str11: db "ACPI table `%.4s` present at 0x%lx", 0x0a, 0
 
 section .bss
 XSDP: resq 1
