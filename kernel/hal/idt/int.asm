@@ -31,6 +31,8 @@ unhandledInt:
     call dbgPrintf
     call abort
 
+section .jmpTable
+
 intJumpTable:
     dq unhandledInt
     dq unhandledInt
