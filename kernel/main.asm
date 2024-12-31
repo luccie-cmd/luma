@@ -9,8 +9,10 @@ section .text
 KernelMain:
     call halEarlyInit
     call acpiInit
+%ifdef DEBUG
     call acpiPrintTableSignatures
-    ; call halMidInit
+%endif    
+    call halMidInit
 
     mov rdi, str4
     call dbgPrintf
