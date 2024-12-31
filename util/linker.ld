@@ -24,14 +24,8 @@ SECTIONS
     {
         __text_start = .;
         *(.text .text.*)
-        __text_end = .;
-    } :text
-
-    .jmpTable ALIGN(4K) :
-    {
-        __jmpTable_start = .;
         *(.jmpTable .jmpTable.*)
-        __jmpTable_end = .;
+        __text_end = .;
     } :text
 
     /* .rodata section */
