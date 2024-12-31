@@ -238,7 +238,7 @@ def linkKernel(kernel_dir, linker_file, static_lib_files=[]):
     if callCmd(command, True)[0] != 0:
         print(f"LD   {file} Failed")
         exit(1)
-    callCmd(f"objdump -C -d -Mintel {CONFIG['outDir'][0]}/kernel.elf > {CONFIG['outDir'][0]}/kernel.asm")
+    callCmd(f"objdump -C -d -Mintel,addr64,x86-64 {CONFIG['outDir'][0]}/kernel.elf > {CONFIG['outDir'][0]}/kernel.asm")
 
 def makeImageFile(out_file):
     size = parseSize(CONFIG["imageSize"][0])
